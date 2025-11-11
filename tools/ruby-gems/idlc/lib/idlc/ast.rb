@@ -7445,8 +7445,11 @@ end,
     def type_check(symtab)
       csr.type_check(symtab)
 
-      if ["sw_read", "address"].include?(function_name)
+      if function_name == "sw_read"
         type_error "unexpected argument(s)" unless args.empty?
+      elsif function_name == "address"
+        type_error "unexpected argument(s)" unless args.empty?
+        type_error "csr is accessed indirectly, and has no address" if csr_def(symtab)&.indirect?
       elsif ["implemented_without?"].include?(function_name)
         type_error "Expecting one argument" unless args.size == 1
         type_error "Expecting an ExtensionName" unless args[0].type(symtab).kind == :enum_ref && args[0].class_name == "ExtensionName"
