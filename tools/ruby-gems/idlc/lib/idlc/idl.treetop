@@ -331,11 +331,9 @@ grammar Idl
   rule bits_cast
     '$bits' space* '(' space*
       expr:(
-        csr_register_access_expression
-        /
-        enum_ref
-        /
         expression
+        /
+        csr_register_access_expression
       )
     space* ')' <Idl::BitsCastSyntaxNode>
   end

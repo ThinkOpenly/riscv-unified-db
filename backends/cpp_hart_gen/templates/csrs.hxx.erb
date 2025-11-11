@@ -207,9 +207,12 @@ namespace udb {
 
     CsrAddressType address_type() const override { return <%= csr.indirect? ? 'CsrAddressType::Indirect' : 'CsrAddressType::Direct' -%>; }
     unsigned address() const override { <%= !csr.indirect? ? "return #{csr.address};" : "throw CsrAddressTypeError(\"#{csr.name} is not direct addressible.\")" %>; }
+    _Bits<12, false> address_bits() const { <%= !csr.indirect? ? "return #{csr.address}_b;" : "throw CsrAddressTypeError(\"#{csr.name} is not direct addressible.\")" %>; }
     uint64_t indirect_address() const override { <%= csr.indirect? ? "return #{csr.indirect_address};" : "throw CsrAddressTypeError(\"#{csr.name} is not indirect.\")" %>; }
     uint8_t indirect_slot() const override { <%= csr.indirect? ? "return #{csr.indirect_slot};" : "throw CsrAddressTypeError(\"#{csr.name} is not indirect.\")" %>; }
-    static constexpr unsigned _address() { return <%= csr.address %>; }
+    <%- if !csr.indirect? -%>
+    static constexpr _Bits<12, false> _address() { return <%= csr.address %>_b; }
+    <%- end -%>
     const std::string name() const override { return "<%= csr.name %>"; }
     PrivilegeMode mode() const override { return PrivilegeMode::<%= csr.priv_mode %>; }
     bool writable() const override { return <%= csr.writable %>; }

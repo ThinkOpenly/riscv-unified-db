@@ -25,7 +25,7 @@ access:
   vu: always
 operation(): |
   # Ensure JVT readable
-  Csr csr_handle = direct_csr_lookup(CSR[jvt].address());
+  Csr csr_handle = direct_csr_lookup($bits(CSR[jvt].address()));
   XReg jvt = csr_sw_read(csr_handle);
 
   if (CSR[jvt].MODE != 0) {
