@@ -25,10 +25,20 @@ definedBy:
     name: H
 sw_read(): |
   Bits<SXLEN> result = 0;
-  if ($bits(CSR[hideleg])[2]) result[1] = $bits(CSR[hip])[2];
-  if ($bits(CSR[hideleg])[6]) result[5] = $bits(CSR[hip])[6];
-  if ($bits(CSR[hideleg])[10]) result[9] = $bits(CSR[hip])[10];
-  if ($bits(CSR[hideleg])[13]) result[13] = $bits(CSR[sip])[13];
+  if (CSR[hideleg].VSSI == 1) {
+    result[1] = CSR[hip].VSSIP;
+  }
+  if (CSR[hideleg].VSTI == 1) {
+    result[5] = CSR[hip].VSTIP;
+  }
+  if (CSR[hideleg].VSEI == 1) {
+    result[9] = CSR[hip].VSEIP;
+  }
+  if (implemented?(ExtensionName::Sscofpmf)) {
+    if (CSR[hideleg].LCOFI == 1) {
+      result[13] = CSR[sip].LCOFIP;
+    }
+  }
   return result;
 length: VSXLEN
 fields:
@@ -37,41 +47,52 @@ fields:
     type: RW-H
     reset_value: UNDEFINED_LEGAL
     sw_write(csr_value): |
-      if ($bits(CSR[hideleg])[2]) {
+      if (CSR[hideleg].VSSI == 1) {
         CSR[hip].VSSIP = csr_value.SSIP;
       }
     description: |
       *Supervisor Software Interrupt Pending*
       Indicates a pending software interrupt at the supervisor level.
-      Read-only zero when `hideleg[2] == 0`, else aliased to `hip.VSSIP`.
+      Read-only zero when `hideleg.VSSI == 0`, else aliased to `hip.VSSIP`.
 
   STIP:
     location: 5
-    type: RO-H
+    type: RW-H
     reset_value: UNDEFINED_LEGAL
+    sw_write(csr_value): |
+      if (CSR[hideleg].VSTI == 1) {
+        CSR[hip].VSTIP = csr_value.STIP;
+      }
     description: |
       *Supervisor Timer Interrupt Pending*
       Indicates a pending timer interrupt at the supervisor level.
-      Read-only zero when `hideleg[6] == 0`, else aliased to `hip.VSTIP`.
+      Read-only zero when `hideleg.VSTI == 0`, else aliased to `hip.VSTIP`.
 
   SEIP:
     location: 9
-    type: RO-H
+    type: RW-H
     reset_value: UNDEFINED_LEGAL
+    sw_write(csr_value): |
+      if (CSR[hideleg].VSEI == 1) {
+        CSR[hip].VSEIP = csr_value.SEIP;
+      }
     description: |
       *Supervisor External Interrupt Pending*
       Indicates a pending external interrupt at the supervisor level.
-      Read-only zero when `hideleg[10] == 0`, else aliased to `hip.VSEIP`.
+      Read-only zero when `hideleg.VSEI == 0`, else aliased to `hip.VSEIP`.
 
   LCOFIP:
+    definedBy:
+      extension:
+        name: Sscofpmf
     location: 13
     type: RW-H
     reset_value: UNDEFINED_LEGAL
     sw_write(csr_value): |
-      if ($bits(CSR[hideleg])[13]) {
+      if (CSR[hideleg].LCOFI == 1) {
         CSR[sip].LCOFIP = csr_value.LCOFIP;
       }
     description: |
       *Local Counter Overflow Interrupt Pending*
       Indicates an overflow of a local counter.
-      Read-only zero when `hideleg[13] == 0`, else aliased to `sip.LCOFIP`.
+      Read-only zero when `hideleg.LCOFI == 0`, else aliased to `sip.LCOFIP`.

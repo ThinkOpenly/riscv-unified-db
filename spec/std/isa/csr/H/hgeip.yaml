@@ -28,6 +28,6 @@ fields:
     long_name: Guest external interrupt pending bits
     location_rv32: 31-1
     location_rv64: 63-1
-    type: RO
+    type: RO-H
     reset_value: 0
     description: Pending bits; see description of hgeip

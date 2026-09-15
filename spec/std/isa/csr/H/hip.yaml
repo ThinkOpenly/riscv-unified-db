@@ -31,7 +31,7 @@ sw_read(): |
 
   # VSTIP: logical OR of hvip.VSTIP and vstimecmp comparison (if Sstc)
   if (implemented?(ExtensionName::Sstc)) {
-    if ((CSR[hvip].VSTIP == 1'b1) | ((read_mtime() + CSR[htimedelta].DELTA) >= CSR[vstimecmp].VSTIMECMP)) {
+    if ((CSR[hvip].VSTIP == 1'b1) || ((read_mtime() + CSR[htimedelta].DELTA) >= CSR[vstimecmp].TIME)) {
       res[6] = 1'b1;
     }
   } else {
