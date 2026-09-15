@@ -372,6 +372,17 @@ namespace :build do
     end
   end
 
+  task :softfloat_tests do
+    ENV["CONFIG"] = "rv64"
+    ENV["BUILD_TYPE"] = "debug"
+    _, build_name = configs_build_name
+    Rake::Task["gen:cpp_hart"].invoke
+    Rake::Task["#{CPP_HART_GEN_DST}/#{build_name}/build/Makefile"].invoke
+    Dir.chdir("#{CPP_HART_GEN_DST}/#{build_name}/build") do
+      sh "make -j #{$jobs} test_softfloat_fp"
+    end
+  end
+
   task renode_hart: ["gen:cpp_hart"] do
     _, build_name = configs_build_name
 
@@ -421,7 +432,9 @@ namespace :test do
     Dir.chdir "#{CPP_HART_GEN_DST}/#{build_name}/build" do
       sh "make -j #{$jobs} test_bits_directed"
       sh "make -j #{$jobs} test_bits_random"
+      sh "make -j #{$jobs} test_softfloat_fp"
       sh "make -j #{$jobs} test_regfile"
+      sh "make -j #{$jobs} test_util"
       sh "ctest -T coverage -T test"
     end
   end
@@ -459,6 +472,7 @@ namespace :test do
       "srl", "srli", "srliw", "srlw",
       "sub", "subw",
       "xor", "xori"]
+    #rv64uiTests = ["add"]
 
     rv32umTests = ["div", "divu",
       "mul", "mulh", "mulhsu", "mulhu",
@@ -537,5 +551,12 @@ namespace :test do
     uvTests.each do |t|
       sh "#{CPP_HART_GEN_DST}/#{build_name}/build/iss -m #{configs_name[0]} -c #{$root}/cfgs/#{configs_name[0]}.yaml tests/isa/rv#{base}uv-p-#{t}"
     end
+  end
+
+  task softfloat: ["build:softfloat_tests"] do
+    ENV["CONFIG"] = "rv64"
+    ENV["BUILD_TYPE"] = "debug"
+    _, build_name = configs_build_name
+    sh "#{CPP_HART_GEN_DST}/#{build_name}/build/test_softfloat_fp"
   end
 end
