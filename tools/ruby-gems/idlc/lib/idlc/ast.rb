@@ -9377,7 +9377,7 @@ module Idl
     sig { params(symtab: SymbolTable).returns(CsrField) }
     def field_def(symtab)
       field = csr_obj(symtab).fields.find { |f| f.name == @field_name }
-      type_error "#{@field_name} is not a field of CSR[#{csr_name}]" if field.nil?
+      type_error "#{@field_name} is not a field of CSR[#{csr_name}]" if not field
       field
     end
 
