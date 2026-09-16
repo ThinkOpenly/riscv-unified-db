@@ -24,7 +24,7 @@ definedBy:
   extension:
     name: H
 sw_read(): |
-  Bits<SXLEN> result = 0;
+  XReg result = 0;
   if (CSR[hideleg].VSSI == 1) {
     result[1] = CSR[hip].VSSIP;
   }

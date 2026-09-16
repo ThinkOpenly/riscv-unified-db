@@ -17,7 +17,7 @@ definedBy:
   extension:
     name: H
 sw_read(): |
-  Bits<SXLEN> res = 0;
+  XReg res = 0;
 
   # SGEIP: 1 iff bitwise AND of hgeip and hgeie is nonzero
   if (($bits(CSR[hgeie]) & $bits(CSR[hgeip])) != 0) {
@@ -79,7 +79,8 @@ fields:
     reset_value: 0
     sw_write(csr_value): |
       # VSSIP in hip is an alias of VSSIP in hvip
-      CSR[hvip].VSSIP = $bits(csr_value)[2];
+      CSR[hvip].VSSIP = csr_value.VSSIP;
+      return csr_value.VSSIP;
     description: |
       Pending interrupt bit for VS-level software interrupts (VSSI).
       This bit is an alias of the `vssip` bit in `hvip`.
