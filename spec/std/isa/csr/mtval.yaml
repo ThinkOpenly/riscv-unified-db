@@ -134,5 +134,6 @@ fields:
         !(implemented?(ExtensionName::Zicfiss) && REPORT_CAUSE_IN_MTVAL_ON_SHADOW_STACK_SOFTWARE_CHECK)
       ) {
         return CsrFieldType::RO;
+      }
       return CsrFieldType::RWH;
     reset_value: 0
