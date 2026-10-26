@@ -13,9 +13,53 @@ versions:
     state: ratified
     ratification_date: 2019-12
 requirements:
-  extension:
-    name: S
-    version: ">= 1.12.0"
+  allOf:
+    - extension:
+        name: S
+        version: ">= 1.12.0"
+    - extension:
+        name: I
+    - anyOf:
+        - allOf:
+            - param:
+                name: MXLEN
+                equal: 32
+            - extension:
+                name: Sv32
+        - allOf:
+            - param:
+                name: MXLEN
+                equal: 64
+            - extension:
+                name: Sv39
+    - param:
+        anyOf:
+          - name: REPORT_VA_IN_MTVAL_ON_BREAKPOINT
+            equal: true
+          - name: REPORT_ENCODING_IN_MTVAL_ON_ILLEGAL_INSTRUCTION
+            equal: true
+          - name: REPORT_VA_IN_MTVAL_ON_LOAD_MISALIGNED
+            equal: true
+          - name: REPORT_VA_IN_MTVAL_ON_STORE_AMO_MISALIGNED
+            equal: true
+          - name: REPORT_VA_IN_MTVAL_ON_INSTRUCTION_MISALIGNED
+            equal: true
+          - name: REPORT_VA_IN_MTVAL_ON_LOAD_ACCESS_FAULT
+            equal: true
+          - name: REPORT_VA_IN_MTVAL_ON_STORE_AMO_ACCESS_FAULT
+            equal: true
+          - name: REPORT_VA_IN_MTVAL_ON_INSTRUCTION_ACCESS_FAULT
+            equal: true
+          - name: REPORT_VA_IN_MTVAL_ON_LOAD_PAGE_FAULT
+            equal: true
+          - name: REPORT_VA_IN_MTVAL_ON_STORE_AMO_PAGE_FAULT
+            equal: true
+          - name: REPORT_VA_IN_MTVAL_ON_INSTRUCTION_PAGE_FAULT
+            equal: true
+          - name: REPORT_CAUSE_IN_MTVAL_ON_LANDING_PAD_SOFTWARE_CHECK
+            equal: true
+          - name: REPORT_CAUSE_IN_MTVAL_ON_SHADOW_STACK_SOFTWARE_CHECK
+            equal: true
 
 description: |
   This chapter describes the RISC-V hypervisor extension, which

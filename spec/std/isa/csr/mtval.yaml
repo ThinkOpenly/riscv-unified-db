@@ -101,5 +101,24 @@ fields:
       <%- end -%>
       !===
 
-    type: RW-H
+    type(): |
+      if (
+        REPORT_VA_IN_MTVAL_ON_BREAKPOINT ||
+        REPORT_ENCODING_IN_MTVAL_ON_ILLEGAL_INSTRUCTION ||
+        REPORT_VA_IN_MTVAL_ON_LOAD_MISALIGNED ||
+        REPORT_VA_IN_MTVAL_ON_STORE_AMO_MISALIGNED ||
+        REPORT_VA_IN_MTVAL_ON_INSTRUCTION_MISALIGNED ||
+        REPORT_VA_IN_MTVAL_ON_LOAD_ACCESS_FAULT ||
+        REPORT_VA_IN_MTVAL_ON_STORE_AMO_ACCESS_FAULT ||
+        REPORT_VA_IN_MTVAL_ON_INSTRUCTION_ACCESS_FAULT ||
+        REPORT_VA_IN_MTVAL_ON_LOAD_PAGE_FAULT ||
+        REPORT_VA_IN_MTVAL_ON_STORE_AMO_PAGE_FAULT ||
+        REPORT_VA_IN_MTVAL_ON_INSTRUCTION_PAGE_FAULT ||
+        (implemented?(ExtensionName::Zicfilp) && REPORT_CAUSE_IN_MTVAL_ON_LANDING_PAD_SOFTWARE_CHECK) ||
+        (implemented?(ExtensionName::Zicfiss) && REPORT_CAUSE_IN_MTVAL_ON_SHADOW_STACK_SOFTWARE_CHECK)
+      ) {
+        return CsrFieldType::RWH;
+      } else {
+        return CsrFieldType::RO;
+      }
     reset_value: 0
