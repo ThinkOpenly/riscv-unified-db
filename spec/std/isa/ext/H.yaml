@@ -69,6 +69,32 @@ requirements:
             - param:
                 name: REPORT_CAUSE_IN_MTVAL_ON_SHADOW_STACK_SOFTWARE_CHECK
                 equal: true
+        - allOf:
+            - extension:
+                name: Sdtrig
+            - param:
+                name: SDTRIG_MCONTROL6_SUPPORTED_TRIGGERS
+                includes: true
+            - param:
+                anyOf:
+                  - name: SDTRIG_MCONTROL6_EXECUTE_WRITABLE
+                    equal: true
+                  - name: SDTRIG_MCONTROL6_LOAD_WRITABLE
+                    equal: true
+                  - name: SDTRIG_MCONTROL6_STORE_WRITABLE
+                    equal: true
+            - param:
+                anyOf:
+                  - name: SDTRIG_M_WRITABLE
+                    equal: true
+                  - name: SDTRIG_S_WRITABLE
+                    equal: true
+                  - name: SDTRIG_U_WRITABLE
+                    equal: true
+                  - name: SDTRIG_VS_WRITABLE
+                    equal: true
+                  - name: SDTRIG_VU_WRITABLE
+                    equal: true
 
 description: |
   This chapter describes the RISC-V hypervisor extension, which
