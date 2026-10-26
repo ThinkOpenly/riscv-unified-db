@@ -20,18 +20,10 @@ requirements:
     - extension:
         name: I
     - anyOf:
-        - allOf:
-            - param:
-                name: MXLEN
-                equal: 32
-            - extension:
-                name: Sv32
-        - allOf:
-            - param:
-                name: MXLEN
-                equal: 64
-            - extension:
-                name: Sv39
+        - extension:
+            name: Sv32
+        - extension:
+            name: Sv39
     - anyOf:
         - param:
             anyOf:
