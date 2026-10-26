@@ -19,11 +19,20 @@ requirements:
         version: ">= 1.12.0"
     - extension:
         name: I
-    - anyOf:
-        - extension:
-            name: Sv32
-        - extension:
-            name: Sv39
+    - if:
+        param:
+          name: SXLEN
+          includes: 32
+      then:
+        extension:
+          name: Sv32
+    - if:
+        param:
+          name: SXLEN
+          includes: 64
+      then:
+        extension:
+          name: Sv39
     - anyOf:
         - param:
             anyOf:
